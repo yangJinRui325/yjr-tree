@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
+import { reactive, watch } from 'vue'
 import type { TreeNode } from '@/types/tree'
 
 const props = defineProps<{

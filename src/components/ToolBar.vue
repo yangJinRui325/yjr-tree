@@ -5,11 +5,7 @@
 
     <a-divider type="vertical" />
 
-    <a-upload
-      :before-upload="beforeUpload"
-      :show-upload-list="false"
-      accept="application/json"
-    >
+    <a-upload :before-upload="beforeUpload" :show-upload-list="false" accept="application/json">
       <a-button>导入 JSON</a-button>
     </a-upload>
 
@@ -39,7 +35,7 @@ function beforeUpload(file: File) {
   }
   reader.onerror = () => message.error('读取文件失败')
   reader.readAsText(file)
-  // 阻止 antd 真的去上传
+  // 阻止 antd 真正上传
   return false
 }
 </script>

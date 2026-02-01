@@ -28,6 +28,11 @@ function getSize(el: HTMLElement) {
   return { width: Math.max(100, rect.width), height: Math.max(100, rect.height) }
 }
 
+/** 关键：把响应式数据转为纯对象，避免 G6 改动触发 Vue deep watch 死循环 */
+function toPlain<T>(v: T): T {
+  return JSON.parse(JSON.stringify(v)) as T
+}
+
 let ro: ResizeObserver | null = null
 
 onMounted(() => {
@@ -41,9 +46,8 @@ onMounted(() => {
     onSelect: (id) => emit('select', id),
   })
 
-  api.render(props.data)
+  api.render(toPlain(props.data))
 
-  // 自适配尺寸
   ro = new ResizeObserver(() => {
     if (!wrapRef.value || !api) return
     const s = getSize(wrapRef.value)
@@ -57,7 +61,7 @@ watch(
   () => props.data,
   (d) => {
     if (!api) return
-    api.changeData(d)
+    api.changeData(toPlain(d))
   },
   { deep: true },
 )

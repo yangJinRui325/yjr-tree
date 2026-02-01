@@ -1,3 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS v4 推荐写法 */
+@import "tailwindcss";
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
