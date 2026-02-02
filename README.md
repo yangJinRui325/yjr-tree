@@ -1,5 +1,194 @@
-# Vue 3 + TypeScript + Vite
+# 可视化编辑树系统 - 毕业设计
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+基于 Vue3 + G6 + Ant Design Vue 的树结构可视化编辑系统
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 项目概述
+
+本项目是一个功能完整的树结构可视化编辑系统，支持节点的增删改查、样式自定义、多种布局算法、右键菜单等丰富功能。适用于毕业设计、思维导图、组织架构图等场景。
+
+## 技术栈
+
+- **前端框架**: Vue 3 (Composition API + `<script setup>`)
+- **图形渲染**: AntV G6 (TreeGraph)
+- **UI 组件库**: Ant Design Vue 4.x
+- **样式方案**: Tailwind CSS v4
+- **构建工具**: Vite 7
+- **开发语言**: TypeScript
+
+## 功能特性
+
+### 核心功能
+
+1. **节点管理**
+   - ✅ 添加子节点
+   - ✅ 添加兄弟节点
+   - ✅ 删除节点（支持删除子树）
+   - ✅ 编辑节点属性（名称、描述）
+   - ✅ 节点样式自定义（颜色、边框、圆角、尺寸）
+   - ✅ 节点图标选择
+
+2. **布局算法**
+   - ✅ 紧凑盒状树布局（水平/垂直）
+   - ✅ 树状图布局（Dendrogram）
+   - ✅ 缩进树布局（Indented）
+   - ✅ 思维导图布局（Mindmap）
+
+3. **交互功能**
+   - ✅ 画布拖拽
+   - ✅ 滚轮缩放
+   - ✅ 节点点击选中
+   - ✅ 节点悬停高亮
+   - ✅ 右键上下文菜单
+   - ✅ 节点复制粘贴
+   - ✅ 展开/折叠节点
+
+4. **数据管理**
+   - ✅ JSON 导入/导出
+   - ✅ 数据验证
+   - ✅ 布局重置
+
+5. **视图控制**
+   - ✅ 缩放控制（放大/缩小/重置）
+   - ✅ 适应画布
+   - ✅ 布局切换
+
+## 项目结构
+
+```
+src/
+├── components/          # Vue 组件
+│   ├── GraphCanvas.vue      # 图形画布组件
+│   ├── NodePanel.vue        # 节点属性编辑面板
+│   ├── ContextMenu.vue      # 右键菜单组件
+│   └── Toolbar.vue          # 工具栏组件（可选）
+├── graph/               # G6 图形相关
+│   ├── createTreeGraph.ts   # 图形实例创建和配置
+│   ├── layouts.ts           # 布局算法配置
+│   ├── styles.ts            # 节点样式配置
+│   └── behaviors.ts         # 交互行为配置
+├── types/               # TypeScript 类型定义
+│   └── tree.ts              # 树节点数据结构
+├── utils/               # 工具函数
+│   ├── tree.ts              # 树操作工具函数
+│   └── treeHelper.ts        # 树辅助函数
+├── data/                # 数据文件
+│   ├── demoTree.ts          # 示例数据
+│   └── mockTree.ts          # 模拟数据
+└── styles/              # 样式文件
+    └── index.css            # 全局样式（Tailwind CSS）
+```
+
+## 快速开始
+
+### 安装依赖
+
+```bash
+npm install
+```
+
+### 启动开发服务器
+
+```bash
+npm run dev
+```
+
+### 构建生产版本
+
+```bash
+npm run build
+```
+
+## 数据结构
+
+### TreeNode 类型定义
+
+```typescript
+type TreeNode = {
+  id: string              // 节点唯一标识
+  label: string           // 节点显示名称
+  desc?: string           // 节点描述
+  children?: TreeNode[]   // 子节点列表
+  collapsed?: boolean    // 是否折叠
+  style?: NodeStyle      // 节点样式
+  icon?: NodeIcon        // 节点图标类型
+  extra?: Record<string, any>  // 扩展属性
+}
+```
+
+## 主要功能说明
+
+### 1. 节点编辑
+
+在右侧属性面板中可以编辑选中节点的：
+- 基本信息：名称、描述
+- 样式设置：背景颜色、边框颜色、边框宽度、圆角、尺寸
+- 图标选择：文件夹、文件、用户、团队、设置等
+
+### 2. 布局切换
+
+顶部工具栏支持切换多种布局算法：
+- **紧凑盒状树（水平）**: 适合横向展示的树结构
+- **紧凑盒状树（垂直）**: 适合纵向展示的树结构
+- **树状图**: 经典的树形结构展示
+- **缩进树**: 类似文件管理器的缩进展示
+- **思维导图**: 中心发散的思维导图布局
+
+### 3. 右键菜单
+
+在节点上右键点击可以：
+- 复制节点
+- 粘贴节点（作为子节点）
+- 添加子节点
+- 添加兄弟节点
+- 删除节点
+
+### 4. 视图控制
+
+画布工具栏提供：
+- 放大/缩小
+- 重置缩放
+- 适应画布
+
+## 开发说明
+
+### 对应论文章节
+
+本项目实现对应毕业设计论文的以下章节：
+
+- **第4章 系统详细设计**
+  - 前端界面设计
+  - G6图形渲染设计
+  - 数据结构设计
+  - 事件处理机制设计
+  - 节点编辑模块设计
+
+- **第5章 系统实现**
+  - 前端工程结构和技术选型
+  - 树结构数据模型设计（TypeScript）
+  - 图形渲染模块实现（G6 TreeGraph封装）
+  - 节点增删改查功能实现
+  - 节点样式和自定义节点渲染
+  - 编辑交互模块实现
+  - 图形刷新和布局更新
+
+## 代码特点
+
+1. **类型安全**: 全面使用 TypeScript，提供完整的类型定义
+2. **组件化**: 采用 Vue 3 Composition API，代码结构清晰
+3. **可扩展**: 模块化设计，易于扩展新功能
+4. **注释完善**: 关键代码都有详细注释，对应论文章节
+
+## 浏览器支持
+
+- Chrome (推荐)
+- Firefox
+- Safari
+- Edge
+
+## 许可证
+
+本项目为毕业设计项目，仅供学习参考。
+
+## 作者
+
+杨锦瑞 - 毕业设计项目

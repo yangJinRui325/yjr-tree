@@ -1,21 +1,24 @@
 <template>
-  <div ref="wrapRef" class="h-full w-full">
+  <div ref="wrapRef" class="h-full w-full relative">
     <div ref="containerRef" class="h-full w-full bg-white rounded-lg border border-gray-200"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import type { TreeData } from '@/types/tree'
+import type { TreeData, LayoutType } from '@/types/tree'
 import { createTreeGraph } from '@/graph/createTreeGraph'
 
 const props = defineProps<{
   data: TreeData
   selectedId: string | null
+  layoutType?: LayoutType
 }>()
 
 const emit = defineEmits<{
   (e: 'select', id: string | null): void
+  (e: 'node-right-click', id: string, x: number, y: number): void
+  (e: 'node-hover', id: string | null): void
 }>()
 
 const wrapRef = ref<HTMLElement | null>(null)
@@ -43,7 +46,10 @@ onMounted(() => {
     container: containerRef.value,
     width,
     height,
+    layoutType: props.layoutType,
     onSelect: (id) => emit('select', id),
+    onNodeRightClick: (id, x, y) => emit('node-right-click', id, x, y),
+    onNodeHover: (id) => emit('node-hover', id),
   })
 
   api.render(toPlain(props.data))
@@ -52,7 +58,7 @@ onMounted(() => {
     if (!wrapRef.value || !api) return
     const s = getSize(wrapRef.value)
     api.resize(s.width, s.height)
-    api.graph.fitView(24)
+    api.fitView(24)
   })
   ro.observe(wrapRef.value)
 })
@@ -73,6 +79,21 @@ watch(
     api.setSelected(id)
   },
 )
+
+watch(
+  () => props.layoutType,
+  (layoutType) => {
+    if (!api || !layoutType) return
+    api.updateLayout(layoutType)
+  },
+)
+
+// 暴露方法供父组件调用
+defineExpose({
+  zoom: (ratio: number) => api?.zoom(ratio),
+  zoomTo: (ratio: number) => api?.zoomTo(ratio),
+  fitView: (padding?: number) => api?.fitView(padding),
+})
 
 onBeforeUnmount(() => {
   ro?.disconnect()

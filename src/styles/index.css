@@ -1,8 +1,16 @@
-/* Tailwind CSS v4 推荐写法 */
+/* Tailwind CSS v4 指令 */
 @import "tailwindcss";
+
+/* 确保 html 和 body 占满全屏，这样 h-full 等类才能生效 */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 #app {
   width: 100%;
   height: 100%;
-  display: flex;
 }

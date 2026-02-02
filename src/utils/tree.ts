@@ -10,6 +10,25 @@ export function findNode(root: TreeNode, id: string): TreeNode | null {
   return null
 }
 
+/**
+ * 查找节点的父节点
+ * 返回：父节点，如果找不到或节点是根节点则返回 null
+ */
+export function findParent(root: TreeNode, id: string): TreeNode | null {
+  if (root.id === id) return null // 根节点没有父节点
+  const children = root.children ?? []
+  // 检查直接子节点
+  if (children.some((c) => c.id === id)) {
+    return root
+  }
+  // 递归查找
+  for (const c of children) {
+    const parent = findParent(c, id)
+    if (parent) return parent
+  }
+  return null
+}
+
 export function updateNode(root: TreeNode, id: string, patch: Partial<TreeNode>): boolean {
   const node = findNode(root, id)
   if (!node) return false
